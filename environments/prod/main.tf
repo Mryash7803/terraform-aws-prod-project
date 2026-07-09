@@ -2,7 +2,7 @@ module "vpc" {
   source = "../../modules/vpc"
 
   project_name = "terraform-prod-project"
-  environment  = "dev"
+  environment  = "prod"
   vpc_cidr     = "10.2.0.0/16"
 
   public_subnets = {
@@ -20,7 +20,7 @@ module "security_group" {
   source = "../../modules/security-group"
 
   project_name = "terraform-prod-project"
-  environment  = "dev"
+  environment  = "prod"
   vpc_id       = module.vpc.vpc_id
 }
 
@@ -40,7 +40,7 @@ module "ec2_asg" {
   source = "../../modules/ec2-asg"
 
   project_name       = "terraform-prod-project"
-  environment        = "dev"
+  environment        = "prod"
   private_subnet_ids = module.vpc.private_subnet_ids
   app_sg_id          = module.security_group.app_sg_id
   target_group_arn   = module.alb.target_group_arn
@@ -52,7 +52,7 @@ module "rds" {
   source = "../../modules/rds"
 
   project_name       = "terraform-prod-project"
-  environment        = "dev"
+  environment        = "prod"
   private_subnet_ids = module.vpc.private_subnet_ids
   rds_sg_id          = module.security_group.rds_sg_id
   db_username        = "appuser"
@@ -64,7 +64,7 @@ module "secrets" {
   source = "../../modules/secrets"
 
   project_name = "terraform-prod-project"
-  environment  = "dev"
+  environment  = "prod"
 
   db_username = module.rds.db_username
   db_password = var.db_password
